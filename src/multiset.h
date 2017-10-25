@@ -143,7 +143,7 @@ public:
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   Node *root() {
     /* If you can't understand this you should probably neck yourself */
-    return this->root_;
+    return this->root_.get();
   }
 };
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
