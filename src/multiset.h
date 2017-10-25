@@ -10,10 +10,16 @@ class MultiSet {
 public:
 //========================================================================== 
   class Node {
+    // Members
   private:
     T value_;
     std::unique_ptr<Node> left_, right_;
+
+    // Constructor
+  private:
     Node(const T& value) : value_(value) {}
+
+    // Other shit
   public:
     Node *left() {
       return this->left_;
@@ -25,24 +31,28 @@ public:
       return this->value_;
     }
 
-  private:
-    bool &operator<( Node &comp ) { return this->value < comp.value; }
+// A friend who will only manipulate your data and use you for his structures
     friend class MultiSet<T>;
   };
 //========================================================================== 
+  // Members
 private:
   std::unique_ptr<Node> root_;
   int size_;
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+  // Constructor
 public:
   MultiSet(): size_(0) { }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-  ~MultiSet() {
-    // TODO
-  }
+  // >Destructor in ${currentyear}
+  ~MultiSet() { }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   void insert(const T& value) {
-    if(!this->root_)  // create root
+    /* Simple insertion into binary tree.  Less than goes left, greater than
+    and equal go right.  If no root is defined it will set first insert */
+
+    // Root
+    if(!this->root_)
     {
       root_ = std::unique_ptr<Node>(new Node(value));
       this->size_++;
@@ -52,7 +62,8 @@ public:
     Node* current = root_.get();
     while(true)
     {
-      if(value < current->value_) // Left
+      // Left
+      if(value < current->value_)
       {
         if(current->left_)
           current = current->left_.get();
@@ -64,8 +75,8 @@ public:
         }
       }
 
-
-      else  // Right
+      // Right
+      else
       {
         if(current->right_)
           current = current->right_.get();
@@ -78,25 +89,27 @@ public:
       }
     } // end while
 
-  }
+  } // end function
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   int count(const T& value) {
+    /* offloads work onto coworker below */
     return count(value, this->root_.get());
   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-private:
   int count(const T& value, Node* localRoot) {
+    /* Recursive function to count how many times a value is in a tree.
+    Will be called by the count above with localRoot set to this->root_*/
     if(!localRoot) return 0;
-    int count__ = 0;
-    if(value == localRoot->value_) count__++;
+    int count__ = (value == localRoot->value_) ? 1 : 0;
     if(value < localRoot->value_)
       return count(value, localRoot->left_.get()) + count__;
     else
       return count(value, localRoot->right_.get()) + count__;
   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-public:
   bool contains(const T& value, Node* localRoot = NULL) {
+    /* defining localRoot will allow you to search subtrees and not just
+    from this->root_ */
     Node* current = localRoot ? localRoot : this->root_.get();
     while(current)
     {
@@ -111,13 +124,14 @@ public:
   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
   int size() {
+    // Both ways work.  I just forgot I had a member to track this
     return this->size_;
-    //return size(this->root_.get());  // I forgot I had a member for this
+    // return size(this->root_.get());
   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-private:
   int size(Node* parent)
   {
+    /* Recursive function to calculate size */
     if(!parent)
       return 0;
 
@@ -127,11 +141,11 @@ private:
     return size__ + 1;
   }
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-public:
   Node *root() {
+    /* If you can't understand this you should probably neck yourself */
     return this->root_;
   }
 };
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-} // namespace nonstd
+} // end namespace nonstd
 #endif
