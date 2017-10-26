@@ -22,10 +22,10 @@ public:
     // Other shit
   public:
     Node *left() {
-      return this->left_;
+      return this->left_.get();
     }
     Node *right() {
-      return this->right;
+      return this->right.get();
     }
     const T& value() const {
       return this->value_;
