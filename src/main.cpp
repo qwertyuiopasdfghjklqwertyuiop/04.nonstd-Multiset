@@ -9,7 +9,7 @@ int main(){
 
    srand(time(NULL));
    MultiSet<int> test;
-   for(int k = 0; k < 1000; k++)
+   for(int k = 0; k < 10; k++)
    {
       int temp = rand() % 10;
       test.insert(temp);

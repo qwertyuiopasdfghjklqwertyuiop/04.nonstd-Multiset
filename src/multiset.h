@@ -25,7 +25,7 @@ public:
       return this->left_.get();
     }
     Node *right() {
-      return this->right.get();
+      return this->right_.get();
     }
     const T& value() const {
       return this->value_;
